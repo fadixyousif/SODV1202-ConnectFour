@@ -39,6 +39,23 @@ namespace SODV1202_ConnectFour
     {
         static void Main(string[] args)
         {
+            /*
+            // make 2 player objects
+            Player player1 = new Player("Player 1", 'X');
+            Player player2 = new Player("Player 2", 'O');
+
+            // simulate a turn
+            Player current = player1;
+
+            int move = current.GetMove();
+            Console.WriteLine($"{current.Name} picked column {move + 1}");
+
+            // switch player manually (test)
+            current = (current == player1) ? player2 : player1;
+
+            move = current.GetMove();
+            Console.WriteLine($"{current.Name} picked column {move + 1}"); 
+            */
         }
     }
 }
