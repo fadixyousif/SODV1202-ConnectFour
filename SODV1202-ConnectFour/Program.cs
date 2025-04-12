@@ -6,7 +6,39 @@ using System.Threading.Tasks;
 
 namespace SODV1202_ConnectFour
 {
-     public class Player
+    public interface ILogic
+    {
+        bool CheckWinner();
+    }
+
+    public class HorizontalCheck : ILogic
+    {
+        public bool CheckWinner()
+        {
+            return true;
+        }
+
+    }
+
+    public class VerticalCheck : ILogic
+    {
+        public bool CheckWinner()
+        {
+            return true;
+        }
+
+    }
+
+    public class DiagonalCheck : ILogic
+    {
+        public bool CheckWinner()
+        {
+            return true;
+        }
+
+    }
+
+    public class Player
     {
         public string Name { get; private set; }
         public char Symbol { get; private set; }
