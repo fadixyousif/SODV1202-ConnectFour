@@ -6,12 +6,17 @@ using System.Threading.Tasks;
 
 namespace SODV1202_ConnectFour
 {
-    public interface ILogic
+    public interface IWinLogic
     {
         bool CheckWinner();
     }
 
-    public class HorizontalCheck : ILogic
+    public interface IDrawLogic
+    {
+        bool CheckDraw();
+    }
+
+    public class HorizontalCheck : IWinLogic
     {
         public bool CheckWinner()
         {
@@ -20,22 +25,29 @@ namespace SODV1202_ConnectFour
 
     }
 
-    public class VerticalCheck : ILogic
+    public class VerticalCheck : IWinLogic
     {
         public bool CheckWinner()
         {
             return true;
         }
-
     }
 
-    public class DiagonalCheck : ILogic
+    public class DiagonalCheck : IWinLogic
     {
         public bool CheckWinner()
         {
             return true;
         }
+    }
 
+    public class DrawCheck : IDrawLogic
+    {
+
+        public bool CheckDraw()
+        {
+            return false;
+        }
     }
 
     public class Player
