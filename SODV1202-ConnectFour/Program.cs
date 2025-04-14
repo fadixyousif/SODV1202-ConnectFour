@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Data.Common;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,7 +10,7 @@ namespace SODV1202_ConnectFour
 {
     public interface IWinLogic
     {
-        bool CheckWinner();
+        bool CheckWinner(char[,] grid, int rows, int columns, char player);
     }
 
     public interface IDrawLogic
@@ -18,16 +20,25 @@ namespace SODV1202_ConnectFour
 
     public class HorizontalCheck : IWinLogic
     {
-        public bool CheckWinner()
+        public bool CheckWinner(char[,] grid, int rows, int columns, char player)
         {
-            return true;
+            for (int row = 0; row < rows; row++) {
+                // Row Debugger if X or O matches I know that this check works
+                Console.WriteLine($"Current row: {row}");
+                for (int column = 0; column < columns - 3; column++) {
+                    if (grid[row, column] == player && grid[row, column + 1] == player && grid[row, column + 2] == player && grid[row, column + 3] == player) {
+                        return true; 
+                    }
+                }
+            }
+            return false;
         }
 
     }
 
     public class VerticalCheck : IWinLogic
     {
-        public bool CheckWinner()
+        public bool CheckWinner(char[,] grid, int rows, int columns, char player)
         {
             return true;
         }
@@ -35,18 +46,43 @@ namespace SODV1202_ConnectFour
 
     public class DiagonalCheck : IWinLogic
     {
-        public bool CheckWinner()
+        public bool CheckWinner(char[,] grid, int rows, int columns, char player)
         {
             return true;
         }
     }
 
-    public class DrawCheck : IDrawLogic
+        public class DrawCheck : IDrawLogic
     {
 
         public bool CheckDraw()
         {
             return false;
+        }
+    }
+
+    // game logic test until player logic is fully implemented.
+    class GameLogicTester
+    {
+        const int rows = 6;
+        const int columns = 7;
+
+        public void testGame()
+        {
+
+            // a grid for testing 
+            char[,] grid = new char[rows, columns]
+            {
+                { 'X', 'X', 'X', 'X', 'X', 'O', 'X' },
+                { 'O', 'X', 'O', 'X', 'O', 'X', 'X' },
+                { 'O', 'O', 'X', 'O', 'X', 'O', 'X' },
+                { 'O', 'X', 'O', 'X', 'O', 'X', 'O' },
+                { 'X', 'O', 'X', 'O', 'X', 'S', 'X' },
+                { 'O', 'X', 'O', 'X', 'O', 'X', 'O' }
+            };
+
+            var checker = new HorizontalCheck().CheckWinner(grid, rows, columns, 'X');
+            Console.WriteLine($"is there a winner?: {(checker ? "Yes" : "No")}");
         }
     }
 
@@ -76,13 +112,13 @@ namespace SODV1202_ConnectFour
             return column - 1; // convert to 0-indexed for board logic
         }
     }
-
-
     
     internal class Program
     {
         static void Main(string[] args)
         {
+            var test = new GameLogicTester();
+            test.testGame();
             /*
             // make 2 player objects
             Player player1 = new Player("Player 1", 'X');
