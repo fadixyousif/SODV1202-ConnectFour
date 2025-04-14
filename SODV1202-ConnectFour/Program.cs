@@ -40,7 +40,18 @@ namespace SODV1202_ConnectFour
     {
         public bool CheckWinner(char[,] grid, int rows, int columns, char player)
         {
-            return true;
+            for (int row = 0; row < rows - 3; row++)
+            {
+                for (int column = 0; column < columns; column++)
+                {
+                    if (grid[row, column] == player && grid[row + 1, column] == player && grid[row + 2, column] == player && grid[row + 3, column] == player)
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
         }
     }
 
@@ -73,16 +84,21 @@ namespace SODV1202_ConnectFour
             // a grid for testing 
             char[,] grid = new char[rows, columns]
             {
-                { 'X', 'X', 'X', 'X', 'X', 'O', 'X' },
+                { 'X', 'X', 'O', 'X', 'X', 'O', 'X' },
                 { 'O', 'X', 'O', 'X', 'O', 'X', 'X' },
                 { 'O', 'O', 'X', 'O', 'X', 'O', 'X' },
                 { 'O', 'X', 'O', 'X', 'O', 'X', 'O' },
-                { 'X', 'O', 'X', 'O', 'X', 'S', 'X' },
+                { 'O', 'O', 'X', 'O', 'X', 'S', 'X' },
                 { 'O', 'X', 'O', 'X', 'O', 'X', 'O' }
             };
 
-            var checker = new HorizontalCheck().CheckWinner(grid, rows, columns, 'X');
-            Console.WriteLine($"is there a winner?: {(checker ? "Yes" : "No")}");
+            var Horichecker = new HorizontalCheck().CheckWinner(grid, rows, columns, 'O');
+
+            var VertChecker = new VerticalCheck().CheckWinner(grid, rows, columns, 'O');
+
+            Console.WriteLine($"is there a Horizontal winner?: {(Horichecker ? "Yes" : "No")}");
+            Console.WriteLine($"is there a Vertical winner?: {(VertChecker ? "Yes" : "No")}");
+
         }
     }
 
