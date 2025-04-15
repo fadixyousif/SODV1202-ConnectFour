@@ -15,7 +15,7 @@ namespace SODV1202_ConnectFour
 
     public interface IDrawLogic
     {
-        bool CheckDraw();
+        bool CheckDraw(char[,] grid);
     }
 
     public class HorizontalCheck : IWinLogic
@@ -130,10 +130,37 @@ namespace SODV1202_ConnectFour
 
     public class DrawCheck : IDrawLogic
     {
-
-        public bool CheckDraw()
+        public bool CheckDraw(char[,] grid)
         {
-            return false;
+            // int variable to count how many X and O are in the grid
+            int DrawCounter = 0;
+
+            /* 
+                Draw loop check
+                start both loops from zero and increment and make condition check by getting row from the grind and then same thing for column
+                then use an if statement to check for current row and current column if either X or O are in the column count increment draw counter
+                otherwise do nothing if nothing matches
+            */
+            for (int row = 0; row < grid.GetLength(0); row++)
+            {
+                for (int column = 0; column < grid.GetLength(1); column++)
+                {
+                    if (grid[row, column] == 'X' || grid[row, column] == 'O')
+                    {
+                        DrawCounter++;
+                    }
+                }
+            }
+
+            // if DrawCounter is equal to rows * columns, the grid is full, which means it's a draw (no winner)
+            if ((grid.GetLength(0) * grid.GetLength(1)) == DrawCounter)
+            {
+                // return true which means grid full (no winner).
+                return true;
+            } else {
+                // else return false grid is not full yet there could be a winner.
+                return false;
+            }
         }
     }
 
@@ -147,23 +174,26 @@ namespace SODV1202_ConnectFour
             // a grid for testing 
             char[,] grid = new char[6, 7]
             {
-    { '.', '.', '.', '.', '.', '.', '.' },
-    { 'O', '.', '.', '.', '.', '.', '.' },
-    { '.', 'O', '.', '.', '.', '.', '.' },
-    { '.', '.', 'O', '.', '.', '.', '.' },
-    { '.', '.', '.', 'O', '.', '.', '.' },
-    { '.', '.', '.', '.', '.', '.', '.' }
+                { 'X', 'X', 'O', 'O', 'X', 'X', 'O' },
+                { 'O', 'O', 'X', 'X', 'O', 'O', 'X' },
+                { 'X', 'X', 'O', 'O', 'X', 'X', 'O' },
+                { 'O', 'O', 'X', 'X', 'O', 'O', 'X' },
+                { 'X', 'X', 'O', 'O', 'X', 'X', 'O' },
+                { 'O', 'O', 'X', 'X', 'O', 'O', 'X' }
             };
 
-            var Horichecker = new HorizontalCheck().CheckWinner(grid, 'O');
+            var Horichecker = new HorizontalCheck().CheckWinner(grid, 'X');
 
-            var VertChecker = new VerticalCheck().CheckWinner(grid, 'O');
+            var VertChecker = new VerticalCheck().CheckWinner(grid, 'X');
 
-            var DiagChecker = new DiagonalCheck().CheckWinner(grid, 'O');
+            var DiagChecker = new DiagonalCheck().CheckWinner(grid, 'X');
+
+            var DrawChecker = new DrawCheck().CheckDraw(grid);
 
             Console.WriteLine($"is there a Horizontal winner?: {(Horichecker ? "Yes" : "No")}");
             Console.WriteLine($"is there a Vertical winner?: {(VertChecker ? "Yes" : "No")}");
             Console.WriteLine($"is there a Diag winner?: {(DiagChecker ? "Yes" : "No")}");
+            Console.WriteLine($"is there a Draw?: {(DrawChecker ? "Yes" : "No")}");
 
         }
     }
