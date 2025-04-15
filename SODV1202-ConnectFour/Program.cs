@@ -20,17 +20,28 @@ namespace SODV1202_ConnectFour
 
     public class HorizontalCheck : IWinLogic
     {
+        // Horizontal Winner Check Method
         public bool CheckWinner(char[,] grid, int rows, int columns, char player)
         {
-            for (int row = 0; row < rows; row++) {
-                // Row Debugger if X or O matches I know that this check works
-                Console.WriteLine($"Current row: {row}");
-                for (int column = 0; column < columns - 3; column++) {
-                    if (grid[row, column] == player && grid[row, column + 1] == player && grid[row, column + 2] == player && grid[row, column + 3] == player) {
-                        return true; 
+            /*
+               Horizontal loop check
+               start boths loops from 0 and subtract columns by 3 on condition check since we do not want to get out of bounds
+               first start checking the first row and column with current loop iteration then
+               make and (&&) statement by add column by n until the count of 3 since the index start array index start at 0
+               if true then return true other ignore and loop again until 4 Horizontal line for either player X or O is found.
+               otherwise none found when loop is done return will be false
+            */
+            for (int row = 0; row < rows; row++)
+            {
+                for (int column = 0; column < columns - 3; column++)
+                {
+                    if (grid[row, column] == player && grid[row, column + 1] == player && grid[row, column + 2] == player && grid[row, column + 3] == player)
+                    {
+                        return true;
                     }
                 }
             }
+
             return false;
         }
 
@@ -38,8 +49,19 @@ namespace SODV1202_ConnectFour
 
     public class VerticalCheck : IWinLogic
     {
+
+        // Vertical Winner Check Method
         public bool CheckWinner(char[,] grid, int rows, int columns, char player)
         {
+            /*
+               Vertical loop check
+               start boths loops from 0 and subtract rows by 3 on condition check since we do not want to get out of bounds
+               first start checking the first row and column with current loop iteration then
+               make and (&&) statement by add row by n until the count of 3 since the index start array index start at 0
+               if true then return true other ignore and loop again until 4 Vertical line for either player X or O is found.
+               otherwise none found when loop is done return will be false
+
+            */
             for (int row = 0; row < rows - 3; row++)
             {
                 for (int column = 0; column < columns; column++)
@@ -57,13 +79,55 @@ namespace SODV1202_ConnectFour
 
     public class DiagonalCheck : IWinLogic
     {
+        // Diagonal Winner Check Method
         public bool CheckWinner(char[,] grid, int rows, int columns, char player)
         {
-            return true;
+            /*
+              Upward Diagonal loop check 
+              start row loop from 3 and start column loop from 0 and subtract the amount of columns by 3 on condition check since we do not want to get out of bounds
+              first start checking the first row and column with current loop iteration then 
+              make and (&&) statement by subtract row by n and adding column by n until the count of 3 since the index start array index start at 0
+              if true then return true other ignore and loop again until 4 Upward Diagonal line for either player X or O is found.
+              otherwise none found when loop is done return will be false
+            */
+            for (int row = 3; row < rows; row++)
+            {
+                for (int column = 0; column < columns - 3; column++)
+                {
+                    if (grid[row, column] == player && grid[row - 1, column + 1] == player && grid[row - 2, column + 2] == player && grid[row - 3, column + 3] == player)
+                    {
+                        return true;
+                    }
+                }
+            }
+
+
+            /*
+              Downward Diagonal loop check 
+              start row loop from 0 and start column loop from 0 and subtract the amount of both row and column by 3 on condition check since we do not want to get out of bounds
+              first start checking the first row and column with current loop iteration then 
+              make and (&&) statement by adding row by n and adding column by n until the count of 3 since the index start array index start at 0
+              if true then return true other ignore and loop again until 4 Downward Diagonal line for either player X or O is found.
+              otherwise none found when loop is done return will be false
+            */
+
+            for (int row = 0; row < rows - 3; row++)
+            {
+                for (int column = 0; column < columns - 3; column++)
+                {
+                    if (grid[row, column] == player && grid[row + 1, column + 1] == player && grid[row + 2, column + 2] == player && grid[row + 3, column + 3] == player)
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            // if none true return false.
+            return false;
         }
     }
 
-        public class DrawCheck : IDrawLogic
+    public class DrawCheck : IDrawLogic
     {
 
         public bool CheckDraw()
@@ -82,22 +146,25 @@ namespace SODV1202_ConnectFour
         {
 
             // a grid for testing 
-            char[,] grid = new char[rows, columns]
+            char[,] grid = new char[6, 7]
             {
-                { 'X', 'X', 'O', 'X', 'X', 'O', 'X' },
-                { 'O', 'X', 'O', 'X', 'O', 'X', 'X' },
-                { 'O', 'O', 'X', 'O', 'X', 'O', 'X' },
-                { 'O', 'X', 'O', 'X', 'O', 'X', 'O' },
-                { 'O', 'O', 'X', 'O', 'X', 'S', 'X' },
-                { 'O', 'X', 'O', 'X', 'O', 'X', 'O' }
+    { '.', '.', '.', '.', '.', '.', '.' },
+    { 'O', '.', '.', '.', '.', '.', '.' },
+    { '.', 'O', '.', '.', '.', '.', '.' },
+    { '.', '.', 'O', '.', '.', '.', '.' },
+    { '.', '.', '.', 'O', '.', '.', '.' },
+    { '.', '.', '.', '.', '.', '.', '.' }
             };
 
             var Horichecker = new HorizontalCheck().CheckWinner(grid, rows, columns, 'O');
 
             var VertChecker = new VerticalCheck().CheckWinner(grid, rows, columns, 'O');
 
+            var DiagChecker = new DiagonalCheck().CheckWinner(grid, rows, columns, 'O');
+
             Console.WriteLine($"is there a Horizontal winner?: {(Horichecker ? "Yes" : "No")}");
             Console.WriteLine($"is there a Vertical winner?: {(VertChecker ? "Yes" : "No")}");
+            Console.WriteLine($"is there a Diag winner?: {(DiagChecker ? "Yes" : "No")}");
 
         }
     }
