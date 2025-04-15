@@ -10,7 +10,7 @@ namespace SODV1202_ConnectFour
 {
     public interface IWinLogic
     {
-        bool CheckWinner(char[,] grid, int rows, int columns, char player);
+        bool CheckWinner(char[,] grid, char player);
     }
 
     public interface IDrawLogic
@@ -20,8 +20,9 @@ namespace SODV1202_ConnectFour
 
     public class HorizontalCheck : IWinLogic
     {
+
         // Horizontal Winner Check Method
-        public bool CheckWinner(char[,] grid, int rows, int columns, char player)
+        public bool CheckWinner(char[,] grid, char player)
         {
             /*
                Horizontal loop check
@@ -31,9 +32,9 @@ namespace SODV1202_ConnectFour
                if true then return true other ignore and loop again until 4 Horizontal line for either player X or O is found.
                otherwise none found when loop is done return will be false
             */
-            for (int row = 0; row < rows; row++)
+            for (int row = 0; row < grid.GetLength(0); row++)
             {
-                for (int column = 0; column < columns - 3; column++)
+                for (int column = 0; column < grid.GetLength(1) - 3; column++)
                 {
                     if (grid[row, column] == player && grid[row, column + 1] == player && grid[row, column + 2] == player && grid[row, column + 3] == player)
                     {
@@ -51,7 +52,7 @@ namespace SODV1202_ConnectFour
     {
 
         // Vertical Winner Check Method
-        public bool CheckWinner(char[,] grid, int rows, int columns, char player)
+        public bool CheckWinner(char[,] grid, char player)
         {
             /*
                Vertical loop check
@@ -62,9 +63,9 @@ namespace SODV1202_ConnectFour
                otherwise none found when loop is done return will be false
 
             */
-            for (int row = 0; row < rows - 3; row++)
+            for (int row = 0; row < grid.GetLength(0) - 3; row++)
             {
-                for (int column = 0; column < columns; column++)
+                for (int column = 0; column < grid.GetLength(1); column++)
                 {
                     if (grid[row, column] == player && grid[row + 1, column] == player && grid[row + 2, column] == player && grid[row + 3, column] == player)
                     {
@@ -80,7 +81,7 @@ namespace SODV1202_ConnectFour
     public class DiagonalCheck : IWinLogic
     {
         // Diagonal Winner Check Method
-        public bool CheckWinner(char[,] grid, int rows, int columns, char player)
+        public bool CheckWinner(char[,] grid, char player)
         {
             /*
               Upward Diagonal loop check 
@@ -90,9 +91,9 @@ namespace SODV1202_ConnectFour
               if true then return true other ignore and loop again until 4 Upward Diagonal line for either player X or O is found.
               otherwise none found when loop is done return will be false
             */
-            for (int row = 3; row < rows; row++)
+            for (int row = 3; row < grid.GetLength(0); row++)
             {
-                for (int column = 0; column < columns - 3; column++)
+                for (int column = 0; column < grid.GetLength(1) - 3; column++)
                 {
                     if (grid[row, column] == player && grid[row - 1, column + 1] == player && grid[row - 2, column + 2] == player && grid[row - 3, column + 3] == player)
                     {
@@ -111,9 +112,9 @@ namespace SODV1202_ConnectFour
               otherwise none found when loop is done return will be false
             */
 
-            for (int row = 0; row < rows - 3; row++)
+            for (int row = 0; row < grid.GetLength(0) - 3; row++)
             {
-                for (int column = 0; column < columns - 3; column++)
+                for (int column = 0; column < grid.GetLength(1) - 3; column++)
                 {
                     if (grid[row, column] == player && grid[row + 1, column + 1] == player && grid[row + 2, column + 2] == player && grid[row + 3, column + 3] == player)
                     {
@@ -139,8 +140,6 @@ namespace SODV1202_ConnectFour
     // game logic test until player logic is fully implemented.
     class GameLogicTester
     {
-        const int rows = 6;
-        const int columns = 7;
 
         public void testGame()
         {
@@ -156,11 +155,11 @@ namespace SODV1202_ConnectFour
     { '.', '.', '.', '.', '.', '.', '.' }
             };
 
-            var Horichecker = new HorizontalCheck().CheckWinner(grid, rows, columns, 'O');
+            var Horichecker = new HorizontalCheck().CheckWinner(grid, 'O');
 
-            var VertChecker = new VerticalCheck().CheckWinner(grid, rows, columns, 'O');
+            var VertChecker = new VerticalCheck().CheckWinner(grid, 'O');
 
-            var DiagChecker = new DiagonalCheck().CheckWinner(grid, rows, columns, 'O');
+            var DiagChecker = new DiagonalCheck().CheckWinner(grid, 'O');
 
             Console.WriteLine($"is there a Horizontal winner?: {(Horichecker ? "Yes" : "No")}");
             Console.WriteLine($"is there a Vertical winner?: {(VertChecker ? "Yes" : "No")}");
