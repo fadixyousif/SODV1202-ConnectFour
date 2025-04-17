@@ -193,7 +193,6 @@ namespace SODV1202_ConnectFour
         }
     }
 
-
     public class ConnectFourEngine
     {
         //board size constants – 6 rows, 7 columns (standard Connect Four)
@@ -329,9 +328,6 @@ namespace SODV1202_ConnectFour
             return name;
         }
     }
-
-
-
 
     internal class Program
     {
