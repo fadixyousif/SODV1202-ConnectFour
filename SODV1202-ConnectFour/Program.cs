@@ -199,107 +199,6 @@ namespace SODV1202_ConnectFour
 
         }
 
-
-        public void RunPlayerLogic()
-        {
-            char[,] grid = new char[6, 7]; // Create 6x7 Connect 4 board
-
-            // Filling the grid with empty spaces
-            for (int row = 0; row < 6; row++)
-                for (int col = 0; col < 7; col++)
-                    grid[row, col] = ' ';
-
-            // Asking for player names
-            Console.Write("Enter name for Player 1: ");
-            string name1 = Console.ReadLine();
-
-            Console.Write("Enter name for Player 2: ");
-            string name2 = Console.ReadLine();
-
-            // Creating player objects
-            Player player1 = new Player(name1, 'X');
-            Player player2 = new Player(name2, 'O');
-            Player current = player1;
-
-            // Setting up win/draw checking using your teammate's code
-            IWinLogic[] winCheckers = {
-                new HorizontalCheck(),
-                new VerticalCheck(),
-                new DiagonalCheck()
-            };
-
-            IDrawLogic drawChecker = new DrawCheck();
-
-            bool gameOver = false;
-
-            // Game loop
-            while (!gameOver)
-            {
-                PrintGrid(grid); // Show board
-
-                int col = current.GetMove(); // Ask current player for input
-
-                if (!DropPiece(grid, col, current.Symbol)) // Check if column is full
-                {
-                    Console.WriteLine("Column is full. Try again.");
-                    continue;
-                }
-
-                // Ckeck win
-                foreach (var checker in winCheckers)
-                {
-                    if (checker.CheckWinner(grid, current.Symbol))
-                    {
-                        PrintGrid(grid);
-                        Console.WriteLine($"\n{current.Name} wins!");
-                        gameOver = true;
-                        break;
-                    }
-                }
-
-                // Check draw
-                if (!gameOver && drawChecker.CheckDraw(grid))
-                {
-                    PrintGrid(grid);
-                    Console.WriteLine("\nIt's a draw!");
-                    gameOver = true;
-                }
-
-                // Switch turns
-                current = (current == player1) ? player2 : player1;
-            }
-        }
-
-
-        private void PrintGrid(char[,] grid)
-        {
-            Console.Clear();
-            for (int row = 0; row < grid.GetLength(0); row++)
-            {
-                Console.Write("| ");
-                for (int col = 0; col < grid.GetLength(1); col++)
-                {
-                    Console.Write((grid[row, col] == ' ' ? '#' : grid[row, col]) + " ");
-                }
-                Console.WriteLine("|");
-            }
-            Console.WriteLine("  1 2 3 4 5 6 7");
-        }
-
-        //dropping of the disc in the grid
-        private bool DropPiece(char[,] grid, int col, char symbol)
-        {
-            for (int row = grid.GetLength(0) - 1; row >= 0; row--)
-            {
-                if (grid[row, col] == ' ')
-                {
-                    grid[row, col] = symbol;
-                    return true;
-                }
-            }
-            return false; // Column is full
-        }
-
     }
 
     public class Player
@@ -329,13 +228,139 @@ namespace SODV1202_ConnectFour
         }
     }
 
+
+    public class ConnectFourEngine
+    {
+        public void Run()
+        {
+            do
+            {
+                char[,] grid = new char[6, 7];
+
+                for (int row = 0; row < 6; row++)
+                    for (int col = 0; col < 7; col++)
+                        grid[row, col] = ' ';
+
+                string name1;
+                do
+                {
+                    Console.Write("Enter name for Player 1: ");
+                    name1 = Console.ReadLine();
+                    if(string.IsNullOrWhiteSpace(name1))
+                    {
+                        Console.WriteLine("Please enter a name for Player 1");
+                    }
+                } while (string.IsNullOrWhiteSpace(name1));
+
+                string name2;
+                do
+                {
+                    Console.Write("Enter name for Player 2: ");
+                    name2 = Console.ReadLine();
+                    if (string.IsNullOrWhiteSpace(name2))
+                    {
+                        Console.WriteLine("Please enter a name for Player 2");
+                    }
+                } while (string.IsNullOrWhiteSpace(name2));
+
+                Player player1 = new Player(name1, 'X');
+                Player player2 = new Player(name2, 'O');
+                Player current = player1;
+
+                IWinLogic[] winCheckers = {
+                new HorizontalCheck(),
+                new VerticalCheck(),
+                new DiagonalCheck()
+                };
+
+                IDrawLogic drawChecker = new DrawCheck();
+
+                bool gameOver = false;
+
+                while (!gameOver)
+                {
+                    PrintGrid(grid);
+                    int col = current.GetMove();
+
+                    if (!DropPiece(grid, col, current.Symbol))
+                    {
+                        Console.WriteLine("Column is full. Try again.");
+                        continue;
+                    }
+
+                    foreach (var checker in winCheckers)
+                    {
+                        if (checker.CheckWinner(grid, current.Symbol))
+                        {
+                            PrintGrid(grid);
+                            Console.WriteLine($"\n{current.Name} wins!");
+                            gameOver = true;
+                            break;
+                        }
+                    }
+
+                    if (!gameOver && drawChecker.CheckDraw(grid))
+                    {
+                        PrintGrid(grid);
+                        Console.WriteLine("\nIt's a draw!");
+                        gameOver = true;
+                    }
+
+                    current = (current == player1) ? player2 : player1;
+                }
+
+                Console.Write("\nDo you want to play again? (y/n): ");
+            }
+            while (Console.ReadLine().ToLower() == "y");
+
+            Console.WriteLine("Thanks for playing!");
+        }
+
+        private void PrintGrid(char[,] grid)
+        {
+            Console.Clear();
+            for (int row = 0; row < grid.GetLength(0); row++)
+            {
+                Console.Write("| ");
+
+                for (int col = 0; col < grid.GetLength(1); col++)
+                {
+                    Console.Write((grid[row, col] == ' ' ? '#' : grid[row, col]) + " ");
+                }
+
+                Console.WriteLine("|");
+            }
+
+            Console.WriteLine("  1 2 3 4 5 6 7");
+        }
+
+        private bool DropPiece(char[,] grid, int col, char symbol)
+        {
+            for (int row = grid.GetLength(0) - 1; row >= 0; row--)
+            {
+                if (grid[row, col] == ' ')
+                {
+                    grid[row, col] = symbol;
+                    return true;
+                }
+            }
+            return false;
+        }
+    }
+
+
+
+
     internal class Program
     {
         static void Main(string[] args)
         {
-            var test = new GameLogicTester();
-            test.RunPlayerLogic();
-           
+            //var test = new GameLogicTester();
+            //test.testGame();
+
+            ConnectFourEngine game = new ConnectFourEngine();
+            game.Run();
+
         }
     }
 }
