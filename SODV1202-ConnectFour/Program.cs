@@ -166,41 +166,6 @@ namespace SODV1202_ConnectFour
         }
     }
 
-    // game logic test until player logic is fully implemented.
-    class GameLogicTester
-    {
-
-        public void testGame()
-        {
-
-            // a grid for testing 
-            char[,] grid = new char[6, 7]
-            {
-                { 'X', 'X', 'O', 'O', 'X', 'X', 'O' },
-                { 'O', 'O', 'X', 'X', 'O', 'O', 'X' },
-                { 'X', 'X', 'O', 'O', 'X', 'X', 'O' },
-                { 'O', 'O', 'X', 'X', 'O', 'O', 'X' },
-                { 'X', 'X', 'O', 'O', 'X', 'X', 'O' },
-                { 'O', 'O', 'X', 'X', 'O', 'O', 'X' }
-            };
-
-            var Horichecker = new HorizontalCheck().CheckWinner(grid, 'X');
-
-            var VertChecker = new VerticalCheck().CheckWinner(grid, 'X');
-
-            var DiagChecker = new DiagonalCheck().CheckWinner(grid, 'X');
-
-            var DrawChecker = new DrawCheck().CheckDraw(grid);
-
-            Console.WriteLine($"is there a Horizontal winner?: {(Horichecker ? "Yes" : "No")}");
-            Console.WriteLine($"is there a Vertical winner?: {(VertChecker ? "Yes" : "No")}");
-            Console.WriteLine($"is there a Diag winner?: {(DiagChecker ? "Yes" : "No")}");
-            Console.WriteLine($"is there a Draw?: {(DrawChecker ? "Yes" : "No")}");
-
-        }
-
-    }
-
     public class Player
     {
         public string Name { get; private set; }
@@ -372,12 +337,7 @@ namespace SODV1202_ConnectFour
     {
         static void Main(string[] args)
         {
-            //var test = new GameLogicTester();
-            //test.testGame();
-
-            ConnectFourEngine game = new ConnectFourEngine();
-            game.Run();
-
+            new ConnectFourEngine().Run();
         }
     }
 }
