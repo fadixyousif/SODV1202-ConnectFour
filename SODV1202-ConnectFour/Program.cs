@@ -8,11 +8,13 @@ using System.Threading.Tasks;
 
 namespace SODV1202_ConnectFour
 {
+    // Winner Checker Logic Interface.
     public interface IWinLogic
     {
         bool CheckWinner(char[,] grid, char player);
     }
 
+    // Draw Checker Logic Interface.
     public interface IDrawLogic
     {
         bool CheckDraw(char[,] grid);
