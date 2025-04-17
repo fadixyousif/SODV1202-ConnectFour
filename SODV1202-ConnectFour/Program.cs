@@ -231,74 +231,69 @@ namespace SODV1202_ConnectFour
 
     public class ConnectFourEngine
     {
+        //board size constants – 6 rows, 7 columns (standard Connect Four)
+        private const int Rows = 6;
+        private const int Columns = 7;
+
+        // this method runs the full game loop and handles everything
         public void Run()
         {
             do
             {
-                char[,] grid = new char[6, 7];
+                // creating a blank game board (2D array of chars)
+                char[,] grid = new char[Rows, Columns];
 
-                for (int row = 0; row < 6; row++)
-                    for (int col = 0; col < 7; col++)
+                for (int row = 0; row < Rows; row++)
+                    for (int col = 0; col < Columns; col++)
                         grid[row, col] = ' ';
 
-                string name1;
-                do
-                {
-                    Console.Write("Enter name for Player 1: ");
-                    name1 = Console.ReadLine();
-                    if(string.IsNullOrWhiteSpace(name1))
-                    {
-                        Console.WriteLine("Please enter a name for Player 1");
-                    }
-                } while (string.IsNullOrWhiteSpace(name1));
+                // getting names from both players
+                string name1 = AskForPlayerName(1);
+                string name2 = AskForPlayerName(2);
 
-                string name2;
-                do
-                {
-                    Console.Write("Enter name for Player 2: ");
-                    name2 = Console.ReadLine();
-                    if (string.IsNullOrWhiteSpace(name2))
-                    {
-                        Console.WriteLine("Please enter a name for Player 2");
-                    }
-                } while (string.IsNullOrWhiteSpace(name2));
-
+                // creating two players, assigning X to player1 and O to player2
                 Player player1 = new Player(name1, 'X');
                 Player player2 = new Player(name2, 'O');
                 Player current = player1;
 
+                // initializing all the win checking logic (horizontal, vertical, diagonal)
                 IWinLogic[] winCheckers = {
                 new HorizontalCheck(),
                 new VerticalCheck(),
                 new DiagonalCheck()
                 };
 
+                // drawing checker just to see if board is full with no winner
                 IDrawLogic drawChecker = new DrawCheck();
 
                 bool gameOver = false;
 
+                // this loop runs the turns until someone wins or it’s a draw
                 while (!gameOver)
                 {
                     PrintGrid(grid);
                     int col = current.GetMove();
 
+                    // if column is full, show message and retry
                     if (!DropPiece(grid, col, current.Symbol))
                     {
                         Console.WriteLine("Column is full. Try again.");
                         continue;
                     }
 
+                    // checking if current player has won after this move
                     foreach (var checker in winCheckers)
                     {
                         if (checker.CheckWinner(grid, current.Symbol))
                         {
                             PrintGrid(grid);
-                            Console.WriteLine($"\n{current.Name} wins!");
+                            Console.WriteLine($"\n{current.Name} wins!\nIt's a Connect Four!!!");
                             gameOver = true;
                             break;
                         }
                     }
 
+                    // if no winner, check if the board is full = draw
                     if (!gameOver && drawChecker.CheckDraw(grid))
                     {
                         PrintGrid(grid);
@@ -316,6 +311,7 @@ namespace SODV1202_ConnectFour
             Console.WriteLine("Thanks for playing!");
         }
 
+        // this draws the board on the console screen
         private void PrintGrid(char[,] grid)
         {
             Console.Clear();
@@ -334,8 +330,10 @@ namespace SODV1202_ConnectFour
             Console.WriteLine("  1 2 3 4 5 6 7");
         }
 
+        // tries to drop the current player's disc in the chosen column
         private bool DropPiece(char[,] grid, int col, char symbol)
         {
+            // start from bottom row and go up
             for (int row = grid.GetLength(0) - 1; row >= 0; row--)
             {
                 if (grid[row, col] == ' ')
@@ -345,6 +343,25 @@ namespace SODV1202_ConnectFour
                 }
             }
             return false;
+        }
+
+        // asks for the player name and makes sure it's not empty
+        private string AskForPlayerName(int playerNumber)
+        {
+            string name;
+            do
+            {
+                Console.Write($"Enter name for Player {playerNumber}: ");
+                name = Console.ReadLine();
+
+                if (string.IsNullOrWhiteSpace(name))
+                {
+                    Console.WriteLine("Please enter a name. It can't be empty.");
+                }
+            }
+            while (string.IsNullOrWhiteSpace(name));
+
+            return name;
         }
     }
 
