@@ -240,6 +240,8 @@ namespace SODV1202_ConnectFour
         {
             do
             {
+                Console.Clear();
+
                 // creating a blank game board (2D array of chars)
                 char[,] grid = new char[Rows, Columns];
 
